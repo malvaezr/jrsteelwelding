@@ -152,72 +152,138 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
+    <!-- Projects Section - Spotlight Design -->
     <section class="projects" id="projects">
         <div class="container">
             <div class="section-header">
                 <span class="section-tag animate-on-scroll">Portfolio</span>
                 <h2 class="section-title animate-on-scroll">Featured Projects</h2>
                 <p class="section-subtitle animate-on-scroll">
-                    A showcase of our work across Texas
+                    Drone footage showcasing our precision steel work across Texas
                 </p>
             </div>
 
-            <!-- Project Filters -->
-            <div class="project-filters animate-on-scroll">
-                <button class="filter-btn active" data-filter="all">All Projects</button>
-                <button class="filter-btn" data-filter="healthcare">Healthcare</button>
-                <button class="filter-btn" data-filter="industrial">Industrial</button>
-            </div>
+            <!-- Project Spotlights -->
+            <div class="project-spotlights">
+                <!-- Ward & Burke - Headwater -->
+                <article class="project-spotlight animate-on-scroll" data-category="industrial">
+                    <div class="spotlight-media">
+                        <div class="media-carousel" data-autoplay="true" data-interval="6000">
+                            <!-- Video First -->
+                            <div class="media-item active" data-type="video">
+                                <video src="videos/ward-burke-video.mp4" muted loop playsinline autoplay></video>
+                            </div>
+                            <!-- Images -->
+                            <div class="media-item" data-type="image">
+                                <img src="images/projects/ward-burke-1.jpg" alt="Ward & Burke Headwater - Steel Structure Aerial">
+                            </div>
+                            <div class="media-item" data-type="image">
+                                <img src="images/projects/ward-burke-2.jpg" alt="Ward & Burke Headwater - Construction Progress">
+                            </div>
+                        </div>
+                        <!-- Media Navigation -->
+                        <div class="media-nav">
+                            <button class="media-nav-btn prev" aria-label="Previous media">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                            </button>
+                            <div class="media-indicators">
+                                <button class="indicator active" data-index="0" aria-label="Video"></button>
+                                <button class="indicator" data-index="1" aria-label="Image 1"></button>
+                                <button class="indicator" data-index="2" aria-label="Image 2"></button>
+                            </div>
+                            <button class="media-nav-btn next" aria-label="Next media">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                            </button>
+                        </div>
+                        <!-- Play/Pause for Video -->
+                        <button class="video-control" aria-label="Pause video">
+                            <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                            <svg class="icon-play hidden" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+                        </button>
+                    </div>
+                    <div class="spotlight-content">
+                        <div class="spotlight-header">
+                            <span class="project-badge">Industrial</span>
+                            <span class="project-location-tag">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Central Texas
+                            </span>
+                        </div>
+                        <h3 class="spotlight-title">Ward & Burke - Headwater</h3>
+                        <p class="spotlight-description">
+                            Large-scale industrial infrastructure project featuring heavy steel beam installation,
+                            precision welding, and complex structural connections. Our team delivered this project
+                            with zero safety incidents and ahead of schedule.
+                        </p>
+                        <ul class="spotlight-highlights">
+                            <li>Heavy structural steel erection</li>
+                            <li>Complex beam configurations</li>
+                            <li>Industrial-grade welding</li>
+                        </ul>
+                    </div>
+                </article>
 
-            <!-- Projects Grid -->
-            <div class="projects-grid">
-                <!-- Ward & Burke -->
-                <div class="project-card animate-on-scroll" data-category="industrial">
-                    <div class="project-media">
-                        <div class="media-slider" data-project="wardburke">
-                            <img src="images/projects/ward-burke-1.jpg" alt="Ward & Burke Headwater - Aerial View 1">
-                            <img src="images/projects/ward-burke-2.jpg" alt="Ward & Burke Headwater - Aerial View 2" class="hidden">
+                <!-- Saint Austin Rehabilitation -->
+                <article class="project-spotlight animate-on-scroll" data-category="healthcare">
+                    <div class="spotlight-media">
+                        <div class="media-carousel" data-autoplay="true" data-interval="6000">
+                            <!-- Video First -->
+                            <div class="media-item active" data-type="video">
+                                <video src="videos/saint-austin-video.mp4" muted loop playsinline autoplay></video>
+                            </div>
+                            <!-- Images -->
+                            <div class="media-item" data-type="image">
+                                <img src="images/projects/saint-austin-1.jpg" alt="Saint Austin Rehabilitation - Aerial Overview">
+                            </div>
+                            <div class="media-item" data-type="image">
+                                <img src="images/projects/saint-austin-2.jpg" alt="Saint Austin Rehabilitation - Steel Framework">
+                            </div>
+                            <div class="media-item" data-type="image">
+                                <img src="images/projects/saint-austin-3.jpg" alt="Saint Austin Rehabilitation - Construction Detail">
+                            </div>
                         </div>
-                        <div class="media-controls">
-                            <button class="media-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-                            <span class="media-counter">1 / 2</span>
-                            <button class="media-next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                        <!-- Media Navigation -->
+                        <div class="media-nav">
+                            <button class="media-nav-btn prev" aria-label="Previous media">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                            </button>
+                            <div class="media-indicators">
+                                <button class="indicator active" data-index="0" aria-label="Video"></button>
+                                <button class="indicator" data-index="1" aria-label="Image 1"></button>
+                                <button class="indicator" data-index="2" aria-label="Image 2"></button>
+                                <button class="indicator" data-index="3" aria-label="Image 3"></button>
+                            </div>
+                            <button class="media-nav-btn next" aria-label="Next media">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                            </button>
                         </div>
-                        <div class="project-overlay">
-                            <span class="project-location">Central Texas</span>
-                        </div>
+                        <!-- Play/Pause for Video -->
+                        <button class="video-control" aria-label="Pause video">
+                            <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                            <svg class="icon-play hidden" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+                        </button>
                     </div>
-                    <div class="project-info">
-                        <span class="project-category">Industrial</span>
-                        <h3 class="project-title">Ward & Burke - Headwater</h3>
-                        <p class="project-desc">Industrial infrastructure project with heavy steel components</p>
-                    </div>
-                </div>
-
-                <!-- Saint Austin -->
-                <div class="project-card animate-on-scroll" data-category="healthcare">
-                    <div class="project-media">
-                        <div class="media-slider" data-project="saintaustin">
-                            <img src="images/projects/saint-austin-1.jpg" alt="Saint Austin Rehabilitation - Aerial View 1">
-                            <img src="images/projects/saint-austin-2.jpg" alt="Saint Austin Rehabilitation - Aerial View 2" class="hidden">
-                            <img src="images/projects/saint-austin-3.jpg" alt="Saint Austin Rehabilitation - Aerial View 3" class="hidden">
+                    <div class="spotlight-content">
+                        <div class="spotlight-header">
+                            <span class="project-badge healthcare">Healthcare</span>
+                            <span class="project-location-tag">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Austin, TX
+                            </span>
                         </div>
-                        <div class="media-controls">
-                            <button class="media-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-                            <span class="media-counter">1 / 3</span>
-                            <button class="media-next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
-                        </div>
-                        <div class="project-overlay">
-                            <span class="project-location">Austin, TX</span>
-                        </div>
+                        <h3 class="spotlight-title">Saint Austin Rehabilitation Center</h3>
+                        <p class="spotlight-description">
+                            Modern healthcare facility requiring precision steel work and precast panel installation.
+                            This project demanded strict adherence to healthcare construction standards while maintaining
+                            our commitment to safety and quality.
+                        </p>
+                        <ul class="spotlight-highlights">
+                            <li>Precision steel framework</li>
+                            <li>Precast wall panel installation</li>
+                            <li>Healthcare facility standards</li>
+                        </ul>
                     </div>
-                    <div class="project-info">
-                        <span class="project-category">Healthcare</span>
-                        <h3 class="project-title">Saint Austin Rehabilitation Center</h3>
-                        <p class="project-desc">Healthcare facility with precision steel work and precast panels</p>
-                    </div>
-                </div>
+                </article>
             </div>
         </div>
     </section>

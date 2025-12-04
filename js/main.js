@@ -8,9 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initScrollAnimations();
     initCounterAnimation();
-    initProjectFilters();
-    initMediaSliders();
-    initTestimonialSlider();
+    initMediaCarousels();
     initQuoteForm();
     initSmoothScroll();
 });
@@ -130,208 +128,215 @@ function animateCounter(element) {
 }
 
 /**
- * Project Filters Module
- * Filters project cards based on category
+ * Media Carousel Module
+ * Handles video autoplay, auto-rotation, and manual controls for project spotlights
  */
-function initProjectFilters() {
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
+function initMediaCarousels() {
+    const spotlights = document.querySelectorAll('.project-spotlight');
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const filter = btn.dataset.filter;
+    spotlights.forEach(spotlight => {
+        const carousel = spotlight.querySelector('.media-carousel');
+        const mediaItems = spotlight.querySelectorAll('.media-item');
+        const indicators = spotlight.querySelectorAll('.indicator');
+        const prevBtn = spotlight.querySelector('.media-nav-btn.prev');
+        const nextBtn = spotlight.querySelector('.media-nav-btn.next');
+        const videoControl = spotlight.querySelector('.video-control');
 
-            // Update active button
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            // Filter projects with animation
-            projectCards.forEach(card => {
-                const category = card.dataset.category;
-
-                if (filter === 'all' || category === filter) {
-                    card.classList.remove('hidden');
-                    card.style.opacity = '0';
-                    card.style.transform = 'scale(0.9)';
-
-                    requestAnimationFrame(() => {
-                        card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                        card.style.opacity = '1';
-                        card.style.transform = 'scale(1)';
-                    });
-                } else {
-                    card.style.opacity = '0';
-                    card.style.transform = 'scale(0.9)';
-                    setTimeout(() => {
-                        card.classList.add('hidden');
-                    }, 400);
-                }
-            });
-        });
-    });
-}
-
-/**
- * Media Slider Module
- * Handles image/video galleries within project cards
- */
-function initMediaSliders() {
-    const projectCards = document.querySelectorAll('.project-card');
-
-    projectCards.forEach(card => {
-        const slider = card.querySelector('.media-slider');
-        const prevBtn = card.querySelector('.media-prev');
-        const nextBtn = card.querySelector('.media-next');
-        const counter = card.querySelector('.media-counter');
-
-        if (!slider) return;
-
-        const mediaItems = slider.querySelectorAll('img, video');
-        if (mediaItems.length <= 1) {
-            // Hide controls if only one image
-            const controls = card.querySelector('.media-controls');
-            if (controls) controls.style.display = 'none';
-            return;
-        }
+        if (!carousel || mediaItems.length === 0) return;
 
         let currentIndex = 0;
+        let autoplayInterval = null;
+        let isPaused = false;
         const totalItems = mediaItems.length;
+        const interval = parseInt(carousel.dataset.interval) || 6000;
+        const shouldAutoplay = carousel.dataset.autoplay === 'true';
 
-        function updateSlider() {
+        // Get current video element
+        function getCurrentVideo() {
+            const activeItem = mediaItems[currentIndex];
+            return activeItem?.querySelector('video');
+        }
+
+        // Update carousel display
+        function updateCarousel() {
             mediaItems.forEach((item, index) => {
-                if (index === currentIndex) {
-                    item.classList.remove('hidden');
-                    // Auto-play video when visible
-                    if (item.tagName === 'VIDEO') {
-                        item.play();
-                    }
-                } else {
-                    item.classList.add('hidden');
-                    // Pause video when hidden
-                    if (item.tagName === 'VIDEO') {
-                        item.pause();
+                const isActive = index === currentIndex;
+                item.classList.toggle('active', isActive);
+
+                // Handle video play/pause
+                const video = item.querySelector('video');
+                if (video) {
+                    if (isActive && !isPaused) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
                     }
                 }
             });
 
-            if (counter) {
-                counter.textContent = `${currentIndex + 1} / ${totalItems}`;
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+
+            // Update video control visibility
+            updateVideoControl();
+        }
+
+        // Update video control button state
+        function updateVideoControl() {
+            const video = getCurrentVideo();
+            const pauseIcon = videoControl?.querySelector('.icon-pause');
+            const playIcon = videoControl?.querySelector('.icon-play');
+
+            if (video && videoControl) {
+                videoControl.style.display = 'flex';
+                if (isPaused) {
+                    pauseIcon?.classList.add('hidden');
+                    playIcon?.classList.remove('hidden');
+                } else {
+                    pauseIcon?.classList.remove('hidden');
+                    playIcon?.classList.add('hidden');
+                }
+            } else if (videoControl) {
+                // Hide control if not on video
+                videoControl.style.display = 'none';
             }
         }
 
+        // Go to specific slide
+        function goToSlide(index) {
+            currentIndex = index;
+            updateCarousel();
+            resetAutoplay();
+        }
+
+        // Next slide
         function nextSlide() {
             currentIndex = (currentIndex + 1) % totalItems;
-            updateSlider();
+            updateCarousel();
         }
 
+        // Previous slide
         function prevSlide() {
             currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-            updateSlider();
+            updateCarousel();
         }
 
+        // Start autoplay
+        function startAutoplay() {
+            if (shouldAutoplay && !autoplayInterval) {
+                autoplayInterval = setInterval(nextSlide, interval);
+            }
+        }
+
+        // Stop autoplay
+        function stopAutoplay() {
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                autoplayInterval = null;
+            }
+        }
+
+        // Reset autoplay timer
+        function resetAutoplay() {
+            stopAutoplay();
+            startAutoplay();
+        }
+
+        // Toggle video play/pause
+        function toggleVideo() {
+            const video = getCurrentVideo();
+            if (video) {
+                if (video.paused) {
+                    video.play().catch(() => {});
+                    isPaused = false;
+                } else {
+                    video.pause();
+                    isPaused = true;
+                }
+                updateVideoControl();
+            }
+        }
+
+        // Event Listeners
         prevBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
             prevSlide();
+            resetAutoplay();
         });
 
         nextBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
             nextSlide();
+            resetAutoplay();
         });
 
-        // Initialize
-        updateSlider();
-    });
-}
-
-/**
- * Testimonial Slider Module
- * Handles testimonial carousel navigation
- */
-function initTestimonialSlider() {
-    const track = document.querySelector('.testimonial-track');
-    const cards = document.querySelectorAll('.testimonial-card');
-    const prevBtn = document.querySelector('.testimonial-btn.prev');
-    const nextBtn = document.querySelector('.testimonial-btn.next');
-    const dotsContainer = document.querySelector('.testimonial-dots');
-
-    if (!track || cards.length === 0) return;
-
-    let currentIndex = 0;
-    const totalSlides = cards.length;
-
-    // Create dots
-    cards.forEach((_, index) => {
-        const dot = document.createElement('button');
-        dot.classList.add('dot');
-        if (index === 0) dot.classList.add('active');
-        dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
-        dot.addEventListener('click', () => goToSlide(index));
-        dotsContainer?.appendChild(dot);
-    });
-
-    const dots = document.querySelectorAll('.testimonial-dots .dot');
-
-    function updateSlider() {
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentIndex);
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => goToSlide(index));
         });
-    }
 
-    function goToSlide(index) {
-        currentIndex = index;
-        updateSlider();
-    }
+        videoControl?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleVideo();
+        });
 
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % totalSlides;
-        updateSlider();
-    }
+        // Pause autoplay on hover
+        spotlight.addEventListener('mouseenter', stopAutoplay);
+        spotlight.addEventListener('mouseleave', () => {
+            if (!isPaused) startAutoplay();
+        });
 
-    function prevSlide() {
-        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-        updateSlider();
-    }
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-    prevBtn?.addEventListener('click', prevSlide);
-    nextBtn?.addEventListener('click', nextSlide);
+        carousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            stopAutoplay();
+        }, { passive: true });
 
-    // Auto-advance every 6 seconds
-    let autoSlide = setInterval(nextSlide, 6000);
+        carousel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].clientX;
+            handleSwipe();
+            if (!isPaused) startAutoplay();
+        }, { passive: true });
 
-    // Pause on hover
-    track.addEventListener('mouseenter', () => clearInterval(autoSlide));
-    track.addEventListener('mouseleave', () => {
-        autoSlide = setInterval(nextSlide, 6000);
-    });
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
 
-    // Touch/swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    track.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-
-    track.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].clientX;
-        handleSwipe();
-    }, { passive: true });
-
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
-
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
-                nextSlide();
-            } else {
-                prevSlide();
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
             }
         }
-    }
+
+        // Initialize carousel with IntersectionObserver for performance
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    updateCarousel();
+                    startAutoplay();
+                } else {
+                    stopAutoplay();
+                    // Pause all videos when not visible
+                    mediaItems.forEach(item => {
+                        const video = item.querySelector('video');
+                        if (video) video.pause();
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        observer.observe(spotlight);
+
+        // Initial setup
+        updateCarousel();
+    });
 }
 
 /**
