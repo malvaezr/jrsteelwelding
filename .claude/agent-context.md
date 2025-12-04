@@ -122,9 +122,9 @@ In `index.html`, find `<!-- Testimonials Section -->` (~line 323). Each testimon
 ```
 
 ### Update Contact Info
-Search for these in `index.html`:
-- Phone: `(555) 123-4567`
-- Email: `info@jrsteelwelding.com`
+Current contact info in `index.html` (Quote section + Footer):
+- Phone: `(832) 265-0882`
+- Email: `rmalvaez@jr-steel.com`
 - Location: `Central Texas`
 
 ---
