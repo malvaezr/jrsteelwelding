@@ -129,6 +129,106 @@ Current contact info in `index.html` (Quote section + Footer):
 
 ---
 
+## Security Review (REQUIRED BEFORE EVERY DEPLOYMENT)
+
+**CRITICAL: Perform FULL CODEBASE security review before EVERY deployment.**
+**Do NOT skip any checks. Review ALL files, not just changed files.**
+
+---
+
+### FULL SECURITY SCAN COMMANDS (Run ALL of these)
+
+```bash
+# 1. XSS & Injection Vulnerabilities
+grep -rn "eval\|innerHTML\|document.write\|javascript:\|\.html(" --include="*.js" --include="*.html" .
+
+# 2. Exposed Secrets & Credentials
+grep -rn "api_key\|apikey\|secret\|password\|token\|credential\|auth" --include="*.js" --include="*.html" --include="*.css" -i .
+
+# 3. Unsafe External Links (target="_blank" without rel)
+grep -rn 'target="_blank"' --include="*.html" . | grep -v 'rel='
+
+# 4. External Scripts (verify each is necessary and trusted)
+grep -rn '<script.*src=' --include="*.html" .
+
+# 5. Insecure HTTP Links (should be HTTPS)
+grep -rn 'http://' --include="*.html" --include="*.js" --include="*.css" . | grep -v 'xmlns'
+
+# 6. Form Actions (check for exposed endpoints)
+grep -rn 'action=' --include="*.html" .
+
+# 7. External Resources (images, fonts, etc.)
+grep -rn 'https://' --include="*.html" . | grep -v 'schema.org\|fonts.googleapis\|fonts.gstatic'
+
+# 8. Dangerous DOM Methods
+grep -rn "\.insertAdjacentHTML\|\.outerHTML\|\.writeln\|createContextualFragment" --include="*.js" .
+
+# 9. Event Handler Injection Points
+grep -rn "on[a-z]*=" --include="*.html" . | grep -v "onclick\|onsubmit\|onload"
+
+# 10. SQL/NoSQL Injection Patterns (if any backend)
+grep -rn "SELECT\|INSERT\|UPDATE\|DELETE\|DROP\|\$where" --include="*.js" -i .
+```
+
+---
+
+### SECURITY CHECKLIST (Verify ALL items)
+
+#### 1. Cross-Site Scripting (XSS) Prevention
+- [ ] No `eval()` anywhere in codebase
+- [ ] No `innerHTML` with dynamic/user content
+- [ ] No `document.write()` with dynamic content
+- [ ] Using `textContent` instead of `innerHTML` where possible
+- [ ] All user inputs are sanitized before display
+
+#### 2. Input Validation
+- [ ] All form inputs have proper validation
+- [ ] Email fields validate email format
+- [ ] Phone fields validate phone format
+- [ ] No SQL/NoSQL injection vulnerabilities
+- [ ] Form submission is protected (CSRF if applicable)
+
+#### 3. External Resources Security
+- [ ] All external scripts have integrity hashes (SRI)
+- [ ] External scripts are from trusted CDNs only
+- [ ] External images are from trusted sources
+- [ ] No unnecessary external dependencies
+- [ ] All external URLs use HTTPS
+
+#### 4. Link Security
+- [ ] All `target="_blank"` links have `rel="noopener noreferrer"`
+- [ ] No `javascript:` URLs
+- [ ] No `data:` URLs with executable content
+- [ ] All links point to legitimate destinations
+
+#### 5. Sensitive Data Protection
+- [ ] No API keys in code
+- [ ] No passwords or secrets
+- [ ] No customer PII exposed
+- [ ] No internal URLs/endpoints exposed
+- [ ] No debug information in production
+
+#### 6. Content Security
+- [ ] No inline event handlers with dynamic content
+- [ ] No dynamic script generation
+- [ ] No unsafe redirects
+- [ ] No open redirects vulnerability
+
+#### 7. File Security
+- [ ] No sensitive files committed (.env, credentials, etc.)
+- [ ] .gitignore properly configured
+- [ ] No backup files exposed (.bak, .old, etc.)
+
+---
+
+### AFTER SECURITY REVIEW
+
+Only proceed with deployment if ALL checks pass.
+Document any findings in commit message.
+If vulnerabilities found: FIX FIRST, then re-run full review.
+
+---
+
 ## Deployment Process
 
 ### To deploy changes:

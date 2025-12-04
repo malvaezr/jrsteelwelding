@@ -1,0 +1,43 @@
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.old
+*.backup
+*.tmp
+
+# Log files
+*.log
+npm-debug.log*
+
+# Dependencies (if any added later)
+node_modules/
+vendor/
+
+# Build outputs (if any added later)
+dist/
+build/
+*.min.js.map
+
+# Sensitive data
+*.sql
+*.sqlite
+*.db
